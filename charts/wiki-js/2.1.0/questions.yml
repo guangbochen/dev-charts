@@ -1,0 +1,88 @@
+categories:
+  - wiki
+questions:
+  - variable: defaultImage
+    default: true
+    description: "Use default Docker image"
+    label: Use Default Image
+    type: boolean
+    show_subquestion_if: false
+    group: "Container Images"
+    subquestions:
+      - variable: image.repository
+        default: "requarks/wiki"
+        description: "Image name"
+        type: string
+        label: Image Name
+      - variable: image.tag
+        default: "2.5"
+        description: "Image tag"
+        type: string
+        label: Image Tag
+  - variable: postgresql.postgresqlHost
+    default: ""
+    description: "PostgreSQL host URL"
+    type: string
+    required: true
+    label: PostgreSQL host URL
+    group: "PostgreSQL Settings"
+  - variable: postgresql.postgresqlPort
+    default: ""
+    description: "PostgreSQL database port"
+    type: string
+    required: true
+    label: PostgreSQL database port
+    group: "PostgreSQL Settings"
+  - variable: postgresql.postgresqlDatabase
+    default: "wiki"
+    description: "PostgreSQL database name"
+    type: string
+    required: true
+    label: PostgreSQL database name
+    group: "PostgreSQL Settings"
+  - variable: postgresql.postgresqlUser
+    default: "wiki"
+    description: "PostgreSQL database user"
+    type: string
+    required: true
+    label: PostgreSQL database user
+    group: "PostgreSQL Settings"
+  - variable: postgresql.existingSecret
+    default: ""
+    description: "PostgreSQL existing secret"
+    type: secret
+    required: true
+    label: Select existing PostgreSQL credentails
+    group: "PostgreSQL Settings"
+  - variable: ingress.enabled
+    default: true
+    description: "Expose app using Layer 7 Load Balancer - ingress"
+    type: boolean
+    label: Expose app using Layer 7 Load Balancer
+    show_subquestion_if: true
+    group: "Services and Load Balancing"
+    subquestions:
+      - variable: ingress.hosts[0].host
+        default: "wiki.cnrancher.cn"
+        description: "Hostname to your app installation"
+        type: hostname
+        required: true
+        label: Hostname
+      - variable: ingress.hosts[0].paths[0]
+        default: "/"
+        description: "Host path to your app installation"
+        type: string
+        required: true
+        label: Host Path
+  - variable: service.type
+    default: "ClusterIP"
+    description: "Service type"
+    type: enum
+    show_if: "ingress.enabled=false"
+    options:
+      - "ClusterIP"
+      - "NodePort"
+      - "LoadBalancer"
+    required: true
+    label: Service Type
+    group: "Services and Load Balancing"
